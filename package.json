@@ -1,0 +1,17 @@
+{
+  "name": "squircle",
+  "version": "1.0.0",
+  "description": "A Figma plugin to create squircles",
+  "main": "code.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "Scott Dodge",
+  "license": "MIT",
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.19.0"
+  },
+  "dependencies": {
+    "typescript": "^4.1.3"
+  }
+}
