@@ -1,5 +1,5 @@
 {
-  "name": "squircle",
+  "name": "figma-squircle",
   "version": "1.0.0",
   "description": "A Figma plugin to create squircles",
   "main": "code.js",
