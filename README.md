@@ -1,40 +1,56 @@
-Below are the steps to get your plugin running. You can also find instructions at:
+# Figsvelte
 
-  https://www.figma.com/plugin-docs/setup/
+A boilerplate for creating Figma plugins using Svelte.
 
-This plugin template uses Typescript and NPM, two standard tools in creating JavaScript applications.
+This starter project has everything you need to start developing a Figma plugin usign Svelte. Your JS, CSS, SVG and image assets can be bundled on build. The package will take care of compiling your typescript + app on save during development, and also minify on build.
 
-First, download Node.js which comes with NPM. This will allow you to install TypeScript and other
-libraries. You can find the download link here:
+Additionally, this package comes preconfigured with [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte) where you have access to a large range of components and icons that match the Figma UI, to get you up and running quickly. Note: installing this boilerplate will install the component library as a dependency.
 
-  https://nodejs.org/en/download/
+Only what you import/use will be included in the final build for small bundle size.
 
-Next, install TypeScript using the command:
+## To get started
 
-  npm install -g typescript
+```bash
+npx degit thomas-lowry/figsvelte figma-plugin
+cd figma-plugin
+npm install
+```
 
-Finally, in the directory of your plugin, get the latest type definitions for the plugin API by running:
+_Note that you will need to have [Node.js](https://nodejs.org/) installed._
 
-  npm install --save-dev @figma/plugin-typings
+## Development
 
-If you are familiar with JavaScript, TypeScript will look very familiar. In fact, valid JavaScript code
-is already valid Typescript code.
+During development, watch your project for changes with the following command.
 
-TypeScript adds type annotations to variables. This allows code editors such as Visual Studio Code
-to provide information about the Figma API while you are writing code, as well as help catch bugs
-you previously didn't notice.
+```bash
+npm run dev
+```
 
-For more information, visit https://www.typescriptlang.org/
+Start building your plugin UI in `'src/Plugin.svelte'`.
 
-Using TypeScript requires a compiler to convert TypeScript (code.ts) into JavaScript (code.js)
-for the browser to run.
+## Build
 
-We recommend writing TypeScript code using Visual Studio code:
+When ready to package up your final Figma Plugin:
 
-1. Download Visual Studio Code if you haven't already: https://code.visualstudio.com/.
-2. Open this directory in Visual Studio Code.
-3. Compile TypeScript to JavaScript: Run the "Terminal > Run Build Task..." menu item,
-    then select "tsc: watch - tsconfig.json". You will have to do this again every time
-    you reopen Visual Studio Code.
+```bash
+npm run build
+```
 
-That's it! Visual Studio Code will regenerate the JavaScript file every time you save.
+## Useful info
+
+To include an external CSS file:
+
+```javascript
+import styles from "./styles.css";
+```
+
+To include an SVG:
+
+```javascript
+import SvgName from './image.svg';
+
+//use in your markup
+{@html SvgName}
+```
+
+_For more info on using the Icon component system with SVGs from [Figma Plugin DS Svelte](https://github.com/thomas-lowry/figma-plugin-ds-svelte), refer to the repo._

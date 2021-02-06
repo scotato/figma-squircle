@@ -2,6 +2,6 @@
   "name": "Squircle",
   "id": "930173909910797614",
   "api": "1.0.0",
-  "main": "code.js",
-  "ui": "ui.html"
+  "main": "public/code.js",
+  "ui": "public/index.html"
 }
