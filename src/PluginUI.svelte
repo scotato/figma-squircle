@@ -6,54 +6,100 @@
 	//import some Svelte Figma UI components
 	import {
 		Button,
-		Input,
+		// IconButton,
 		Label,
 		IconCornerRadius,
+		// IconLinkBroken,
+		// IconLinkConnected,
 	} from "figma-plugin-ds-svelte";
+	import Input from "./Input.svelte";
 
-	let curvature = 1;
+	$: width = 100;
+	$: height = 100;
+	$: curvature = 1;
+	$: isLinked = false;
+	$: isShiftDown = false;
+
+	// const toggleSquare = () => (isLinked = !isLinked);
+
+	onmessage = (event) => {
+		console.log("got this from the plugin code", event.data.pluginMessage);
+	};
+
+	function onKeyUp({ key }) {
+		switch (key) {
+			case "Shift":
+				isShiftDown = false;
+				break;
+			case "ArrowUp":
+			case "ArrowDown":
+				this.select();
+			default:
+				break;
+		}
+	}
+
+	function onWidthKeyDown(event) {
+		const increment = isShiftDown ? 10 : 1;
+
+		switch (event.key) {
+			case "Shift":
+				isShiftDown = true;
+				break;
+			case "ArrowUp":
+				event.preventDefault();
+				width += increment;
+				if (isLinked) height = (height * height) / width;
+				resize();
+				break;
+			case "ArrowDown":
+				event.preventDefault();
+				width -= increment;
+				if (isLinked) height = (height * height) / width;
+				resize();
+				break;
+			default:
+				break;
+		}
+	}
+
+	function onHeightKeyDown(event) {
+		const increment = isShiftDown ? 10 : 1;
+
+		switch (event.key) {
+			case "Shift":
+				isShiftDown = true;
+				break;
+			case "ArrowUp":
+				event.preventDefault();
+				height += increment;
+				resize();
+				break;
+			case "ArrowDown":
+				event.preventDefault();
+				height -= increment;
+				resize();
+				break;
+			default:
+				break;
+		}
+	}
+
+	function onCurvatureChange(e) {
+		const pluginMessage = { type: "update-squircle", curvature };
+		parent.postMessage({ pluginMessage }, "*");
+	}
+
+	function resize() {
+		const pluginMessage = { type: "resize", width, height };
+		parent.postMessage({ pluginMessage }, "*");
+	}
+
+	// if square set W or H on W or H blur
 
 	//this is a reactive variable that will return false when a value is selected from
 	//the select menu, its value is bound to the primary buttons disabled prop
 	// $: disabled = selectedShape === null;
-
-	// function createShapes() {
-	// 	parent.postMessage(
-	// 		{
-	// 			pluginMessage: {
-	// 				type: "create-shapes",
-	// 				count: count,
-	// 				shape: "Rectangle",
-	// 			},
-	// 		},
-	// 		"*"
-	// 	);
-	// }
-
-	function createSquircle() {
-		const type = "create-squircle";
-		const squircle = createSquirclePath({ curvature });
-		const pluginMessage = { type, squircle };
-		parent.postMessage({ pluginMessage }, "*");
-	}
-
-	function createSquirclePath({
-		curvature = 1,
-		width = 100,
-		height = 100,
-	} = {}) {
-		const cx = width / 2;
-		const cy = height / 2;
-		const arc = Math.min(cx, cy) * (1 - curvature);
-		const d = `
-			M 0 ${cy}
-			C 0 ${arc}, ${arc} 0, ${cx} 0
-			S ${width} ${arc}, ${width} ${cy}, ${width - arc} ${height}
-				${cx} ${height}, 0 ${height - arc}, 0 ${cy}
-		`;
-
-		return `<path id="Squircle" fill="#C4C4C4" d="${d}" />`;
-	}
 </script>
 
 <style>
@@ -61,13 +107,30 @@
 </style>
 
 <div class="wrapper p-xxsmall">
-	<Label>Curvature</Label>
+	<div class="flex mb-xsmall">
+		<Input
+			iconText="W"
+			bind:value={width}
+			onkeydown={onWidthKeyDown}
+			onkeyup={onKeyUp}
+			min={1} />
+		<Input
+			iconText="H"
+			bind:value={height}
+			onkeydown={onHeightKeyDown}
+			onkeyup={onKeyUp}
+			min={1} />
+		<!-- <IconButton
+			on:click={toggleSquare}
+			iconName={isLinked ? IconLinkConnected : IconLinkBroken} /> -->
+	</div>
+
 	<Input
 		iconName={IconCornerRadius}
 		bind:value={curvature}
-		class="mb-xxsmall" />
-
-	<div class="flex p-xxsmall mb-xsmall">
-		<Button on:click={createSquircle}>Create shapes</Button>
-	</div>
+		onchange={onCurvatureChange}
+		class="mb-xxsmall"
+		min={0.5}
+		max={1}
+		step={0.01} />
 </div>
