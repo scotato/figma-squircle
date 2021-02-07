@@ -19,11 +19,39 @@
 	$: curvature = 1;
 	$: isLinked = false;
 	$: isShiftDown = false;
+	$: isSizeDisabled = false;
+	$: isCurvatureDisabled = false;
 
 	// const toggleSquare = () => (isLinked = !isLinked);
 
+	const dedupByKey = (key, nodes) =>
+		Array.from(new Set(nodes.map((node) => node[key])));
+
+	const uniqueProps = (nodes = []) => ({
+		widths: dedupByKey("width", nodes),
+		heights: dedupByKey("height", nodes),
+		curvatures: dedupByKey("curvature", nodes),
+	});
+
 	onmessage = (event) => {
-		console.log("got this from the plugin code", event.data.pluginMessage);
+		const { type, nodes } = event.data.pluginMessage;
+		switch (type) {
+			case "init":
+			case "selectionchange":
+				const { widths, heights, curvatures } = uniqueProps(nodes);
+				isSizeDisabled = widths.length !== 1 && heights.length !== 1;
+				isCurvatureDisabled = curvatures.length !== 1;
+
+				if (!isSizeDisabled) {
+					width = widths[0];
+					height = heights[0];
+				}
+
+				if (!isCurvatureDisabled) {
+					curvature = curvatures[0];
+				}
+				break;
+		}
 	};
 
 	function onKeyUp({ key }) {
@@ -99,7 +127,6 @@
 
 	//this is a reactive variable that will return false when a value is selected from
 	//the select menu, its value is bound to the primary buttons disabled prop
-	// $: disabled = selectedShape === null;
 </script>
 
 <style>
@@ -111,12 +138,14 @@
 		<Input
 			iconText="W"
 			bind:value={width}
+			disabled={isSizeDisabled}
 			onkeydown={onWidthKeyDown}
 			onkeyup={onKeyUp}
 			min={1} />
 		<Input
 			iconText="H"
 			bind:value={height}
+			disabled={isSizeDisabled}
 			onkeydown={onHeightKeyDown}
 			onkeyup={onKeyUp}
 			min={1} />
@@ -128,6 +157,7 @@
 	<Input
 		iconName={IconCornerRadius}
 		bind:value={curvature}
+		disabled={isCurvatureDisabled}
 		onchange={onCurvatureChange}
 		class="mb-xxsmall"
 		min={0.5}

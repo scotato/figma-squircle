@@ -1,4 +1,4 @@
-import { createSquirclePath, createSquircleSVG } from './squircle'
+import { createSquircleSVG } from './squircle'
 
 // get current selection, filter out all non-squircles, if no squircles selected create one
 
@@ -6,8 +6,8 @@ const isSquircle = node => node.getPluginData('curvature')
 
 const squircleProps = node => {
   const curvature = node.getPluginData('curvature')
-  const { id, x, y, width, height, vectorPaths } = node
-  return { id, x, y, width, height, vectorPaths, curvature }
+  const { id, width, height } = node
+  return { id, width, height, curvature }
 }
 
 figma.currentPage.selection = figma.currentPage.selection.filter(isSquircle);
@@ -18,8 +18,16 @@ if (!figma.currentPage.selection.length) {
 
 figma.showUI(__html__, { width: 232, height: 102 });
 
+figma.ui.postMessage({
+  type: 'init',
+  nodes: figma.currentPage.selection.filter(isSquircle).map(squircleProps)
+})
+
 figma.on("selectionchange", () => {
-  figma.ui.postMessage(figma.currentPage.selection.filter(isSquircle).map(squircleProps))
+  figma.ui.postMessage({
+    type: 'selectionchange',
+    nodes: figma.currentPage.selection.filter(isSquircle).map(squircleProps)
+  })
 })
 
 figma.ui.onmessage = msg => {

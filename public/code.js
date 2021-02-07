@@ -20,16 +20,23 @@ function createSquircleSVG({ curvature = 1, width = 100, height = 100 } = {}) {
 const isSquircle = node => node.getPluginData('curvature');
 const squircleProps = node => {
     const curvature = node.getPluginData('curvature');
-    const { id, x, y, width, height, vectorPaths } = node;
-    return { id, x, y, width, height, vectorPaths, curvature };
+    const { id, width, height } = node;
+    return { id, width, height, curvature };
 };
 figma.currentPage.selection = figma.currentPage.selection.filter(isSquircle);
 if (!figma.currentPage.selection.length) {
     createSquircle({ curvature: 1 });
 }
 figma.showUI(__html__, { width: 232, height: 102 });
+figma.ui.postMessage({
+    type: 'init',
+    nodes: figma.currentPage.selection.filter(isSquircle).map(squircleProps)
+});
 figma.on("selectionchange", () => {
-    figma.ui.postMessage(figma.currentPage.selection.filter(isSquircle).map(squircleProps));
+    figma.ui.postMessage({
+        type: 'selectionchange',
+        nodes: figma.currentPage.selection.filter(isSquircle).map(squircleProps)
+    });
 });
 figma.ui.onmessage = msg => {
     switch (msg.type) {
