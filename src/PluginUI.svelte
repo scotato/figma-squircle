@@ -14,7 +14,7 @@
 	const RELATIVE = "relative";
 
 	let modeOptions = [
-		{ value: SIMPLE, label: "Simple", group: null, selected: false },
+		{ value: SIMPLE, label: "Simple", group: null, selected: true },
 		{ value: FIXED, label: "Fixed", group: null, selected: false },
 		{ value: RELATIVE, label: "Relative", group: null, selected: false },
 	];
@@ -66,7 +66,7 @@
 					relative2,
 				} = uniqueProps(nodes);
 
-				isSizeDisabled = widths.length !== 1 && heights.length !== 1;
+				isSizeDisabled = widths.length !== 1 || heights.length !== 1;
 				isModeDisabled = modes.length !== 1;
 				isCurvatureDisabled = isModeDisabled || curvatures.length !== 1;
 				isFixed1Disabled = isModeDisabled || fixed1.length !== 1;
@@ -74,15 +74,16 @@
 				isRelative1Disabled = isModeDisabled || relative1.length !== 1;
 				isRelative2Disabled = isModeDisabled || relative2.length !== 1;
 
-				if (!isSizeDisabled) {
-					width = widths[0];
-					height = heights[0];
-				}
-
 				if (!isModeDisabled) {
-					mode = modeOptions.find((option) => option.value === modes[0]);
+					mode = modes[0];
+					modeOptions = modeOptions.map((m) => ({
+						...m,
+						selected: m.value === mode,
+					}));
 				}
 
+				if (widths.length === 1) width = widths[0];
+				if (heights.length === 1) height = heights[0];
 				if (!isCurvatureDisabled) c = curvatures[0];
 				if (!isFixed1Disabled) p1 = fixed1[0];
 				if (!isFixed2Disabled) p2 = fixed2[0];
