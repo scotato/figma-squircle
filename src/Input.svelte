@@ -166,10 +166,10 @@
       {min}
       {max}
       {step}
-      {onkeypress}
-      {onkeydown}
-      {onkeyup}
-      {onchange}
+      on:keypress={onkeypress}
+      on:keydown={onkeydown}
+      on:keyup={onkeyup}
+      on:change={onchange}
       onclick="this.select()"
       class:borders />
   </div>
