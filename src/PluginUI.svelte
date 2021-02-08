@@ -181,6 +181,7 @@
 
 	function onP1KeyDown(event) {
 		const increment = isShiftDown ? 10 : 1;
+		const max = height / 2;
 		const min = 1;
 
 		switch (event.key) {
@@ -190,6 +191,7 @@
 			case "ArrowUp":
 				event.preventDefault();
 				p1 = Number(p1) + increment;
+				if (p1 >= max) p1 = max;
 				update();
 				break;
 			case "ArrowDown":
@@ -205,6 +207,7 @@
 
 	function onP2KeyDown(event) {
 		const increment = isShiftDown ? 10 : 1;
+		const max = width / 2;
 		const min = 1;
 
 		switch (event.key) {
@@ -214,6 +217,7 @@
 			case "ArrowUp":
 				event.preventDefault();
 				p2 = Number(p2) + increment;
+				if (p2 >= max) p2 = max;
 				update();
 				break;
 			case "ArrowDown":

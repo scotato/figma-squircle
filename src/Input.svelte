@@ -146,6 +146,9 @@
       on:change={onchange}
       on:input={oninput}
       on:blur={onblur}
+      on:click={function () {
+        this.select();
+      }}
       {id}
       {name}
       {disabled}
