@@ -16,6 +16,8 @@
   export let onkeydown = () => {};
   export let onkeyup = () => {};
   export let onchange = () => {};
+  export let oninput = () => {};
+  export let onblur = () => {};
   export let placeholder = "";
   export { className as class };
 
@@ -137,8 +139,13 @@
       <Icon {iconName} {iconText} {spin} color="black3" />
     </div>
     <input
-      type="number"
       bind:value
+      on:keypress={onkeypress}
+      on:keydown={onkeydown}
+      on:keyup={onkeyup}
+      on:change={onchange}
+      on:input={oninput}
+      on:blur={onblur}
       {id}
       {name}
       {disabled}
@@ -146,19 +153,20 @@
       {min}
       {max}
       {step}
-      on:keypress={onkeypress}
-      on:keydown={onkeydown}
-      on:keyup={onkeyup}
-      on:change={onchange}
-      onclick="this.select()"
+      type="number"
       class="indent"
       class:borders />
   </div>
 {:else}
   <div class="input {className}">
     <input
-      type="number"
       bind:value
+      on:keypress={onkeypress}
+      on:keydown={onkeydown}
+      on:keyup={onkeyup}
+      on:change={onchange}
+      on:input={oninput}
+      on:blur={onblur}
       {id}
       {name}
       {disabled}
@@ -166,11 +174,7 @@
       {min}
       {max}
       {step}
-      on:keypress={onkeypress}
-      on:keydown={onkeydown}
-      on:keyup={onkeyup}
-      on:change={onchange}
-      onclick="this.select()"
+      type="number"
       class:borders />
   </div>
 {/if}

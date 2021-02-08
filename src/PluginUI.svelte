@@ -26,7 +26,7 @@
 	$: r2 = 0.332;
 	$: p1 = 16;
 	$: p2 = 16;
-	$: mode = modeOptions[0];
+	$: mode = SIMPLE;
 	$: isShiftDown = false;
 	$: isSizeDisabled = false;
 	$: isModeDisabled = false;
@@ -336,44 +336,47 @@
 		bind:menuItems={modeOptions}
 		bind:value={mode}
 		on:change={update}
-		disabled={isModeDisabled}
 		iconName={IconAdjust}
+		disabled={isModeDisabled}
 		class="mb-xxxsmall" />
 
 	<div class="flex mb-xxxsmall">
 		<Input
-			iconText="W"
 			bind:value={width}
-			disabled={isSizeDisabled}
 			onkeydown={onWidthKeyDown}
 			onkeyup={onKeyUp}
-			min={1} />
+			onblur={update}
+			iconText="W"
+			min={1}
+			disabled={isSizeDisabled} />
 		<Input
-			iconText="H"
 			bind:value={height}
-			disabled={isSizeDisabled}
 			onkeydown={onHeightKeyDown}
 			onkeyup={onKeyUp}
-			min={1} />
+			onblur={update}
+			iconText="H"
+			min={1}
+			disabled={isSizeDisabled} />
 	</div>
 
 	{#if mode.value === SIMPLE}
 		<div class="flex mb-xxxsmall">
 			<Icon iconName={IconCornerRadius} color="black3" />
 			<input
-				type="range"
-				iconName={IconCornerRadius}
 				bind:value={c}
 				on:input={update}
+				type="range"
+				iconName={IconCornerRadius}
 				disabled={isCurvatureDisabled}
 				min={1}
 				max={10}
 				step={1} />
 			<Input
 				bind:value={c}
-				disabled={isCurvatureDisabled}
 				onkeydown={onCurvatureKeyDown}
 				onkeyup={onKeyUp}
+				onblur={update}
+				disabled={isCurvatureDisabled}
 				class="ml-xxsmall"
 				min={1}
 				max={10}
@@ -384,18 +387,20 @@
 	{#if mode.value === FIXED}
 		<div class="flex mb-xxxsmall">
 			<Input
-				iconText="p1"
 				bind:value={p1}
-				disabled={isFixed1Disabled}
 				onkeydown={onP1KeyDown}
 				onkeyup={onKeyUp}
+				onblur={update}
+				iconText="p1"
+				disabled={isFixed1Disabled}
 				min={1} />
 			<Input
-				iconText="p2"
 				bind:value={p2}
-				disabled={isFixed2Disabled}
 				onkeydown={onP2KeyDown}
 				onkeyup={onKeyUp}
+				onblur={update}
+				iconText="p2"
+				disabled={isFixed2Disabled}
 				min={1} />
 		</div>
 	{/if}
@@ -403,18 +408,20 @@
 	{#if mode.value === RELATIVE}
 		<div class="flex mb-xxxsmall">
 			<Input
-				iconText="r1"
 				bind:value={r1}
-				disabled={isRelative1Disabled}
 				onkeydown={onR1KeyDown}
 				onkeyup={onKeyUp}
+				onblur={update}
+				iconText="r1"
+				disabled={isRelative1Disabled}
 				min={1} />
 			<Input
-				iconText="r2"
 				bind:value={r2}
-				disabled={isRelative2Disabled}
 				onkeydown={onR2KeyDown}
 				onkeyup={onKeyUp}
+				onblur={update}
+				iconText="r2"
+				disabled={isRelative2Disabled}
 				min={1} />
 		</div>
 	{/if}
