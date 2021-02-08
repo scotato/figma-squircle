@@ -19,6 +19,15 @@
 		{ value: RELATIVE, label: "Relative", group: null, selected: false },
 	];
 
+	let mode = modeOptions[0];
+	let isShiftDown = false;
+	let isSizeDisabled = false;
+	let isModeDisabled = false;
+	let isCurvatureDisabled = false;
+	let isFixed1Disabled = false;
+	let isFixed2Disabled = false;
+	let isRelative1Disabled = false;
+	let isRelative2Disabled = false;
 	$: width = 100;
 	$: height = 100;
 	$: c = 5;
@@ -26,15 +35,6 @@
 	$: r2 = 0.332;
 	$: p1 = 16;
 	$: p2 = 16;
-	$: mode = SIMPLE;
-	$: isShiftDown = false;
-	$: isSizeDisabled = false;
-	$: isModeDisabled = false;
-	$: isCurvatureDisabled = false;
-	$: isFixed1Disabled = false;
-	$: isFixed2Disabled = false;
-	$: isRelative1Disabled = false;
-	$: isRelative2Disabled = false;
 
 	const dedupByKey = (key, nodes) =>
 		Array.from(new Set(nodes.map((node) => node[key])));
@@ -75,11 +75,10 @@
 				isRelative2Disabled = isModeDisabled || relative2.length !== 1;
 
 				if (!isModeDisabled) {
-					mode = modes[0];
-					modeOptions = modeOptions.map((m) => ({
-						...m,
-						selected: m.value === mode,
-					}));
+					modeOptions = modeOptions.map((m) => {
+						m.selected = m.value === modes[0];
+						return m;
+					});
 				}
 
 				if (widths.length === 1) width = widths[0];
