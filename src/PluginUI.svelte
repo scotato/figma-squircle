@@ -349,7 +349,7 @@
 			bind:value={width}
 			onkeydown={onWidthKeyDown}
 			onkeyup={onKeyUp}
-			onblur={update}
+			onblur={resize}
 			iconText="W"
 			min={1}
 			disabled={isSizeDisabled} />
@@ -357,7 +357,7 @@
 			bind:value={height}
 			onkeydown={onHeightKeyDown}
 			onkeyup={onKeyUp}
-			onblur={update}
+			onblur={resize}
 			iconText="H"
 			min={1}
 			disabled={isSizeDisabled} />
